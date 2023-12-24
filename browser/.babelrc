@@ -1,0 +1,23 @@
+{
+  "presets": [
+    // 配置的是语法库
+    "@babel/preset-env", // ES6的语法库，不支持装饰器语法，webpack打包的时候babel编译的时候出错
+    // "useBuiltIns":"usage"——可选值：“entry”和“useage”：入口使用和按需加载
+    "@babel/preset-react"
+  ],
+  "plugins": [
+    // 配置的是语法插件
+    ["@babel/plugin-proposal-decorators", { "legacy": true }],
+    [
+      // ES6特有的API转换后支持ES5语法
+      "@babel/plugin-transform-runtime",
+      {
+        "absoluteRuntime": false,
+        "corejs": 2,
+        "helpers": true,
+        "regenerator": true,
+        "useESModule": false
+      }
+    ]
+  ]
+}

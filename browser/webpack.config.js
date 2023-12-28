@@ -1,8 +1,8 @@
 const path = require("path");
 const htmlWebpackPlugin = require("html-webpack-plugin"); // 使用 html-webpack-plugin 可以自定义一个html模板，最终html文件会被打包到 dist文件夹，并且也会把打包好的js文件引入。
-const cross = require("cross-env");
-
-console.log("开发模式：", cross.length);
+const { CleanWebpackPlugin } = require("clean-webpack-plugin"); // 清除dist目录
+const WebpackBar = require("webpackbar"); // 引入进度条显示
+const webpack = require("webpack"); // 自动加载模块，而不必到处import或require
 
 module.exports = {
   // 打包入口配置
@@ -12,8 +12,8 @@ module.exports = {
   // 打包出口配置
   output: {
     path: path.resolve(__dirname, "dist"), // 打包后的数据目录
-    filename: "[name].[hash].js", // 打包后输出文件的文件名，“name”对应入口文件的app名称
     publicPath: "/", // 打包后静态资源的路径
+    filename: "js/[name]_[chunkhash].js", // 打包后输出文件的文件名，“name”对应入口文件的app名称
   },
   // 配置模块，主要处理文件模块
   module: {
@@ -37,7 +37,19 @@ module.exports = {
   },
   // 配置插件，主要处理打包时的操作：如文件移动等
   plugins: [
-    new htmlWebpackPlugin({ template: "./index.html" }), // 配置模版文件
+    new htmlWebpackPlugin({
+      filename: "index.html", // 生成的html文件名，默认是引入的文件名
+      title: "测试标题", // html标题
+      template: "./index.html", // 模版文件
+      chunks: ["index"], // 引入的js文件,对应
+    }), // 配置模版文件
+    new CleanWebpackPlugin(), // 清除dist目录
+    new WebpackBar(), // 进度条显示，打包和启动时候显示进度条
+    // 页面可以省略指定包得导入
+    new webpack.ProvidePlugin({
+      React: "react",
+      ReactDOM: "react-dom",
+    }),
   ],
   // 配置开发地址
   devServer: {
@@ -54,18 +66,18 @@ module.exports = {
     hot: true,
     proxy: {
       // 代理
-      "/check": {
+      "/api": {
         // 请求地址——接口文档上的真实接口地址
         target: "http://www.bjlink32.com/check.php", // 开发测试服务器的接口地址
         changeOrigin: true, // 是否开启跨域
         pathRewrite: { "^/data": "" }, //重写，如果接口文档没有写“/”的话，那么这里就进行重写
       },
     },
-    // overlay: {
-    //   warnings: true,
-    //   errors: true,
-    // },
   },
   mode: "development", // 运行模式：development开发模式，production生产模式
   devtool: "source-map", // 用来开发调试——不用的时候关闭，因为体积太大
+  // 扩展名忽略，import导入的时候可以省略扩展名
+  resolve: {
+    extensions: [".js", ".jsx", ".less", ".scss", ".css"],
+  },
 };

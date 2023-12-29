@@ -1,9 +1,7 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
-
-const App = () => {
-  return <div>你好，react测试成功？</div>;
-};
+import "./global.less";
+import App from "./Component";
 
 const root = createRoot(document.getElementById("root"));
 root.render(<App />);

@@ -2,6 +2,7 @@ const path = require("path");
 const htmlWebpackPlugin = require("html-webpack-plugin"); // 使用 html-webpack-plugin 可以自定义一个html模板，最终html文件会被打包到 dist文件夹，并且也会把打包好的js文件引入。
 const { CleanWebpackPlugin } = require("clean-webpack-plugin"); // 清除dist目录
 const WebpackBar = require("webpackbar"); // 引入进度条显示
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const webpack = require("webpack"); // 自动加载模块，而不必到处import或require
 
 module.exports = {
@@ -18,6 +19,7 @@ module.exports = {
   // 配置模块，主要处理文件模块
   module: {
     rules: [
+      // 针对react组件模块
       {
         test: /\.jsx?$/, // babel-loader处理的文件扩展名
         exclude: /(node_modules|bower_components)/, // 忽略目录
@@ -29,9 +31,61 @@ module.exports = {
           // }
         },
       },
+      // // 针对一些静态文件：图片、字体等
+      // {
+      //   test: /\.(png|jpg|gif|svg)$/,
+      // },
+      // 使用的loader——针对样式文件模块
       {
         test: /\.css$/, // 匹配项
-        use: ["css-loader"], // 使用的loader
+        use: [
+          {
+            // 从下往上执行
+            loader: MiniCssExtractPlugin.loader, // 最后将css插入到style标签里面去，不能和style-loader共用
+          },
+          {
+            loader: "css-loader", // 允许import来进行载入，并将css文件合并成一个
+            options: {
+              modules: true, // 是否开启模块化
+            },
+          },
+        ],
+      },
+      {
+        test: /\.less$/, // 匹配项
+        use: [
+          {
+            // 从下往上执行
+            loader: MiniCssExtractPlugin.loader, // 最后将css插入到style标签里面去，不能和style-loader共用
+          },
+          {
+            loader: "css-loader", // 允许import来进行载入，并将css文件合并成一个
+            options: {
+              modules: true, // 是否开启模块化
+            },
+          },
+          {
+            loader: "less-loader", // 将less文件转换为css文件
+          },
+        ],
+      },
+      {
+        test: /\.scss$/, // 支持sass样式
+        use: [
+          {
+            // 从下往上执行
+            loader: MiniCssExtractPlugin.loader, // 最后将css插入到style标签里面去
+          },
+          {
+            loader: "css-loader", // 允许import来进行载入，并将css文件合并成一个
+            options: {
+              modules: true, // 是否开启模块化
+            },
+          },
+          {
+            loader: "sass-loader", // 将.scss文件转换为css文件
+          },
+        ],
       },
     ],
   },
@@ -50,19 +104,18 @@ module.exports = {
       React: "react",
       ReactDOM: "react-dom",
     }),
+    // css打包插件——将css提取出来放入到指定文件夹下面
+    new MiniCssExtractPlugin({
+      filename: "css/[name]_[hash].css", // 从js入口文件打包后的css文件名
+      chunkFilename: "css/[name]_[hash].css", // 从非js入口文件打包后的css文件名
+    }),
   ],
   // 配置开发地址
   devServer: {
-    // host: "120.0.2.3", // 开发服务器的地址
-    port: 8080, // 地址端口号
-    open: true, // 浏览器自动启动
-    hot: true, // 热更新
-  },
-  devServer: {
     // contentBase: path.join(__dirname, "dist"), // 指定webpack-dev-server根目录
-    port: 8080, // 指定端口，默认是8080，为了防止和其他服务器端口冲突可以进行修改
+    port: 8000, // 指定端口，默认是8080，为了防止和其他服务器端口冲突可以进行修改
     compress: true, // 是否进行压缩所有来自项目路径下“dist/”目录的文件
-    open: true,
+    open: false, // 是否自动打开浏览器
     hot: true,
     proxy: {
       // 代理

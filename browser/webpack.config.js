@@ -4,6 +4,7 @@ const { CleanWebpackPlugin } = require("clean-webpack-plugin"); // 清除dist目
 const WebpackBar = require("webpackbar"); // 引入进度条显示
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const webpack = require("webpack"); // 自动加载模块，而不必到处import或require
+const CopyPlugin = require("copy-webpack-plugin");
 
 module.exports = {
   // 打包入口配置
@@ -32,9 +33,20 @@ module.exports = {
         },
       },
       // // 针对一些静态文件：图片、字体等
-      // {
-      //   test: /\.(png|jpg|gif|svg)$/,
-      // },
+      {
+        test: /\.(png|jpe?g|gif)$/i,
+        use: [
+          {
+            loader: "file-loader",
+            options: {
+              name: "[name].[ext]",
+              outputPath: "img",
+              publicPath: "./public",
+              context: "project",
+            },
+          },
+        ],
+      },
       // 使用的loader——针对样式文件模块
       {
         test: /\.css$/, // 匹配项
@@ -109,6 +121,14 @@ module.exports = {
       filename: "css/[name]_[hash].css", // 从js入口文件打包后的css文件名
       chunkFilename: "css/[name]_[hash].css", // 从非js入口文件打包后的css文件名
     }),
+
+    //
+    new CopyPlugin([
+      {
+        from: __dirname + "/src/mock",
+        to: __dirname + "/dist/mock",
+      },
+    ]),
   ],
   // 配置开发地址
   devServer: {

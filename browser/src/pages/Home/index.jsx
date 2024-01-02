@@ -4,6 +4,6 @@ import stylesTwo from "./index.scss";
 import stylesThree from "./index.css";
 
 const App = () => {
-  return <div className={styles.container}>你好，react测试成功？</div>;
+  return <div className={styles.container}>首页</div>;
 };
 export default App;

@@ -1,15 +1,20 @@
 const path = require("path");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const htmlWebpackPlugin = require("html-webpack-plugin"); // 使用 html-webpack-plugin 可以自定义一个html模板，最终html文件会被打包到 dist文件夹，并且也会把打包好的js文件引入。
 const { CleanWebpackPlugin } = require("clean-webpack-plugin"); // 清除dist目录
 const WebpackBar = require("webpackbar"); // 引入进度条显示
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const webpack = require("webpack"); // 自动加载模块，而不必到处import或require
 const CopyPlugin = require("copy-webpack-plugin");
+// webpack内置插件，对js进行压缩
+const TerserPlugin = require("terser-webpack-plugin");
+// 第三方包：对CSS进行压缩的
+const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
+const Target = process.env.NODE_ENV; // 系统变量——用来判断开发模式
 
 module.exports = {
   // 打包入口配置
   entry: {
-    index: "/index.js",
+    index: "/index.tsx",
   },
   // 打包出口配置
   output: {
@@ -22,30 +27,23 @@ module.exports = {
     rules: [
       // 针对react组件模块
       {
-        test: /\.jsx?$/, // babel-loader处理的文件扩展名
+        test: /\.(ts|tsx)$/, // babel-loader处理的文件扩展名
+        exclude: /(node_modules|bower_components)/, // 忽略目录
+        use: [
+          "babel-loader",
+          {
+            // 转换规则
+            loader: "ts-loader", // loader名称，自动加载.babelrc文件，有对应文件，下面的options配置会被忽略
+          },
+        ],
+      },
+      {
+        test: /\.(js|jsx)$/, // babel-loader处理的文件扩展名
         exclude: /(node_modules|bower_components)/, // 忽略目录
         use: {
           // 转换规则
           loader: "babel-loader", // loader名称，自动加载.babelrc文件，有对应文件，下面的options配置会被忽略
-          // options: {// 语法库  ES6语法库           react语法库
-          //     presets: ["@babel/preset-env", "@babel/preset-react"]
-          // }
         },
-      },
-      // // 针对一些静态文件：图片、字体等
-      {
-        test: /\.(png|jpe?g|gif)$/i,
-        use: [
-          {
-            loader: "file-loader",
-            options: {
-              name: "[name].[ext]",
-              outputPath: "img",
-              publicPath: "./public",
-              context: "project",
-            },
-          },
-        ],
       },
       // 使用的loader——针对样式文件模块
       {
@@ -99,16 +97,47 @@ module.exports = {
           },
         ],
       },
+      // 针对一些静态文件：图片、字体等
+      {
+        test: /\.(png|jpe?g|gif|svg)/,
+        use: [
+          {
+            loader: "url-loader",
+            options: {
+              // url-loader里面的选项
+              limit: 8192, // 8字节以下的图片进行打包，再插入到js/css中——限制
+              esModule: false,
+            },
+          },
+        ],
+      },
+      {
+        test: /\.(ttf|eot|woff|woff2)$/, // 要检测的对象
+        use: [
+          {
+            loader: "file-loader",
+            options: {
+              name: "[name].[ext]",
+            },
+          },
+        ],
+      },
     ],
   },
   // 配置插件，主要处理打包时的操作：如文件移动等
   plugins: [
+    // 配置模版文件
     new htmlWebpackPlugin({
       filename: "index.html", // 生成的html文件名，默认是引入的文件名
       title: "测试标题", // html标题
       template: "./index.html", // 模版文件
       chunks: ["index"], // 引入的js文件,对应
-    }), // 配置模版文件
+    }),
+    // css打包插件——将css提取出来放入到指定文件夹下面
+    new MiniCssExtractPlugin({
+      filename: "css/[name]_[hash].css", // 从js入口文件打包后的css文件名
+      chunkFilename: "css/[name]_[hash].css", // 从非js入口文件打包后的css文件名
+    }),
     new CleanWebpackPlugin(), // 清除dist目录
     new WebpackBar(), // 进度条显示，打包和启动时候显示进度条
     // 页面可以省略指定包得导入
@@ -116,19 +145,13 @@ module.exports = {
       React: "react",
       ReactDOM: "react-dom",
     }),
-    // css打包插件——将css提取出来放入到指定文件夹下面
-    new MiniCssExtractPlugin({
-      filename: "css/[name]_[hash].css", // 从js入口文件打包后的css文件名
-      chunkFilename: "css/[name]_[hash].css", // 从非js入口文件打包后的css文件名
+    // 文件复制
+    new CopyPlugin({
+      patterns: [
+        { from: __dirname + "/public", to: __dirname + "/dist" }, // 将指定位置的文件/文件夹下面的文件/文件夹移动到目标文件夹下面
+        // { from: __dirname + "/public", to: __dirname + "/dist" },// 其他配置
+      ],
     }),
-
-    //
-    new CopyPlugin([
-      {
-        from: __dirname + "/src/mock",
-        to: __dirname + "/dist/mock",
-      },
-    ]),
   ],
   // 配置开发地址
   devServer: {
@@ -147,10 +170,24 @@ module.exports = {
       },
     },
   },
-  mode: "development", // 运行模式：development开发模式，production生产模式
-  devtool: "source-map", // 用来开发调试——不用的时候关闭，因为体积太大
-  // 扩展名忽略，import导入的时候可以省略扩展名
+  // webpack配置项：文件压缩、优化
+  optimization: {
+    minimize: true,
+    minimizer: [
+      // 自定义TerserPlugin压缩
+      new TerserPlugin(),
+      new OptimizeCSSAssetsPlugin(), // CSS压缩
+    ],
+  },
+  mode: Target === "build" ? "production" : "development", // production开发环境，development开发环境
+  // 支持热重载
+  devtool: Target === "dev" ? "source-map" : false, // 用来开发调试——不用的时候关闭，因为体积太大
   resolve: {
-    extensions: [".js", ".jsx", ".less", ".scss", ".css"],
+    // 扩展名忽略，import导入的时候可以省略扩展名
+    extensions: [".js", ".jsx", ".ts", ".tsx", ".less", ".scss", ".css"],
+    // 快速导入地址
+    alias: {
+      "@": path.resolve(__dirname, "/src"),
+    },
   },
 };

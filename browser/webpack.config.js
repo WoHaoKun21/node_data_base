@@ -144,6 +144,7 @@ module.exports = {
     new webpack.ProvidePlugin({
       React: "react",
       ReactDOM: "react-dom",
+      axios: "axios",
     }),
     // 文件复制
     new CopyPlugin({
@@ -164,9 +165,9 @@ module.exports = {
       // 代理
       "/api": {
         // 请求地址——接口文档上的真实接口地址
-        target: "http://www.bjlink32.com/check.php", // 开发测试服务器的接口地址
+        target: "http://localhost:5000", // 开发测试服务器的接口地址
         changeOrigin: true, // 是否开启跨域
-        pathRewrite: { "^/data": "" }, //重写，如果接口文档没有写“/”的话，那么这里就进行重写
+        pathRewrite: { "^/api": "" }, //重写，如果接口文档没有写“/”的话，那么这里就进行重写
       },
     },
   },

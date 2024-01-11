@@ -1,17 +1,30 @@
-const express = require("express"); // express的作用：创建一个web服务器
+const express = require("express");
+var bodyParser = require("body-parser");
+const { mySql } = require("./dataBase");
 
-const app = express();
+const app = express(); //使用express函数
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
-app.link(8080, () => {
-  app.use(express.static("public"));
-  app.get("/", (req, res) => {
-    res.sendFile(__dirname + "/index.html");
+// 查询接口
+app.get("/query", (request, response) => {
+  console.log("接口参数：", request.query);
+  mySql.connect();
+  const sqlstring = `select * from user`;
+  mySql.query(sqlstring, function (err, result) {
+    if (err) {
+      response.send({ code: 500, msg: err.sqlMessage });
+      return;
+    }
+    response.send(result);
   });
-  app.get("/about", (req, res) => {
-    res.sendFile(__dirname + "/about.html");
-  });
-  app.get("/contact", (req, res) => {
-    res.sendFile(__dirname + "/contact.html");
-  });
-  app.get("/help", (req, res) => {});
+  mySql.end(); // 关闭数据库连接
 });
+
+// 编辑接口
+app.post("/form", (request, response) => {
+  console.log("POST接口执行");
+  response.send(request.body); //参数
+});
+
+app.listen(5000);

@@ -6,7 +6,7 @@ const app = express(); //使用express函数
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// 查询接口
+// 查询接口用户
 app.get("/query", (request, response) => {
   console.log("接口参数：", request.query);
   mySql.connect();

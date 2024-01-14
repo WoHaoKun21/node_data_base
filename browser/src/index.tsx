@@ -5,11 +5,13 @@ import active from "../public/active.png";
 const Admin = () => {
   // 接口请求
   const getInterFace = () => {
-    axios("/api/query", {
-      params: { id: 1 },
-    }).then((res: any) => {
-      console.log("接口数据：", res);
-    });
+    fetch("/api/query?id=1", {
+      method: "GET",
+    })
+      .then((res) => res.json())
+      .then((res: any) => {
+        console.log("查询结果：", res);
+      });
   };
   useEffect(() => {
     getInterFace();

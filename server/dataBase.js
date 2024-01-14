@@ -6,7 +6,7 @@ const mySql = mysql.createConnection({
   database: "team", // 所需要连接的数据库的名称（可选）
 });
 
-// 数据库建立链接
+// // 数据库建立链接
 // mySql.connect();
 /* ((err) => {
   // err代表失败

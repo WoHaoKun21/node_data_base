@@ -4,7 +4,7 @@ const { mySql } = require("./dataBase");
 
 const app = express(); //使用express函数
 const prot = 8080; // 端口号——随意，不冲突就好
-const hostName = "192.168.0.173"; // 自己电脑的ip地址，可在终端通过“ipconfig”查看——IPv4地址
+const hostName = "192.168.2.19"; // 自己电脑的ip地址，可在终端通过“ipconfig”查看——IPv4地址
 
 app.use(bodyParser.json()); // 支持post请求参数格式
 app.use(bodyParser.urlencoded({ extended: true }));

@@ -16,35 +16,25 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `user`
+-- Table structure for table `workbench`
 --
 
-DROP TABLE IF EXISTS `user`;
+DROP TABLE IF EXISTS `workbench`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `user` (
-  `userId` int(11) NOT NULL AUTO_INCREMENT,
-  `nickName` varchar(4) COLLATE utf8_unicode_ci NOT NULL,
-  `username` varchar(3) COLLATE utf8_unicode_ci NOT NULL,
-  `password` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
-  `sex` varchar(2) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `phoneNumber` varchar(11) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `email` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `avatar` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
-  PRIMARY KEY (`userId`),
-  UNIQUE KEY `iduser_UNIQUE` (`userId`),
-  UNIQUE KEY `username_UNIQUE` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+CREATE TABLE `workbench` (
+  `idworkbench` int(11) NOT NULL,
+  PRIMARY KEY (`idworkbench`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `user`
+-- Dumping data for table `workbench`
 --
 
-LOCK TABLES `user` WRITE;
-/*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'','石鹏飞','spf!@#456','0','null','','null'),(2,'','张三','zs!@#456','0','null','','null'),(3,'','李四','ls!@#456','0','null','','null'),(6,'','林峰','lf!@#456','0','null','','null'),(12,'','冷锋','lf!@#456','0','null','','null');
-/*!40000 ALTER TABLE `user` ENABLE KEYS */;
+LOCK TABLES `workbench` WRITE;
+/*!40000 ALTER TABLE `workbench` DISABLE KEYS */;
+/*!40000 ALTER TABLE `workbench` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 

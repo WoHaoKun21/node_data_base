@@ -45,7 +45,7 @@ module.exports = {
           loader: "babel-loader", // loader名称，自动加载.babelrc文件，有对应文件，下面的options配置会被忽略
         },
       },
-      // 使用的loader——针对样式文件模块
+      // 使用的loader——针对样式文件模块：让项目支持less、scss、css模块化操作
       {
         test: /\.css$/, // 匹配项
         use: [
@@ -160,12 +160,12 @@ module.exports = {
     port: 8000, // 指定端口，默认是8080，为了防止和其他服务器端口冲突可以进行修改
     compress: true, // 是否进行压缩所有来自项目路径下“dist/”目录的文件
     open: false, // 是否自动打开浏览器
-    hot: true,
+    hot: true,// 是否开启热更新
     proxy: {
       // 代理
       "/api": {
         // 请求地址——接口文档上的真实接口地址
-        target: "http://192.168.0.173:8080", // 开发测试服务器的接口地址
+        target: "http://192.168.2.19:8080", // 开发测试服务器的接口地址
         changeOrigin: true, // 是否开启跨域
         pathRewrite: { "^/api": "" }, //重写，如果接口文档没有写“/”的话，那么这里就进行重写
       },

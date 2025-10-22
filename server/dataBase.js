@@ -6,6 +6,11 @@ const mySql = mysql.createConnection({
   database: "team", // 所需要连接的数据库的名称（可选）
 });
 
+const USER_INSTER = "insert into user";
+const USER_SELECT = "select * from user";
+const USER_UPDATE = "update user Set";
+const USER_DELETE = "delete from users where";
+
 // // 数据库建立链接
 // mySql.connect();
 /* ((err) => {

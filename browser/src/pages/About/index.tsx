@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
-const ExcelReader = () => {
+const About = () => {
   return <div>数据测试页面</div>;
 };
 
-export default ExcelReader;
+export default About;

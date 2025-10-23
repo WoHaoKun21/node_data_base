@@ -1,12 +1,22 @@
 .box {
   display: flex;
   margin-right: 40px;
+
   > span:last-of-type {
     margin: 0px 15px;
   }
+
+  .userInfoSelect > span {
+    margin-right: 6px;
+  }
+  
+  > span,
   .userInfoSelect {
-    > span {
-      margin-right: 6px;
-    }
+    cursor: pointer;
+  }
+
+  > span:hover,
+  .userInfoSelect:hover {
+    background-color: #00000008;
   }
 }

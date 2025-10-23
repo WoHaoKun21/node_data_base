@@ -65,15 +65,20 @@ export const layout: RunTimeLayoutConfig = () => {
   return {
     layout: 'top',
     title: 'APi 文档',
-    logo: '/comm/logo.png',
+    logo: '/comm/logo.png', // 左上角的logo图片
     disableContentMargin: false,
     waterMarkProps: { content: '123456789' },
     onPageChange: () => {},
     rightContentRender: () => <RightContent />,
-    onMenuHeaderClick: () => history.push('/excel'),
+    onMenuHeaderClick: () => history.push('/'),
     childrenRender: (children) => <>{children}</>,
     menuDataRender: () => routes,
     headerHeight: 64,
-    contentStyle: { margin: '0', padding: '0', height: 'calc(100vh - 64px)' },
+    contentStyle: {
+      margin: '0',
+      padding: '0',
+      height: 'calc(100vh - 64px)',
+      overflowY: 'auto',
+    },
   };
 };

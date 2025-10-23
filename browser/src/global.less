@@ -1,0 +1,71 @@
+html,
+body {
+  font-weight: normal;
+}
+* {
+  margin: 0rem;
+  padding: 0rem;
+  list-style: none;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+  // height: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  // 滚动条颜色
+  background-color: #cecece40 !important;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: 0 0;
+}
+
+// layout头部布局样式
+.ant-layout-header.ant-pro-fixed-header.ant-pro-fixed-header-action.ant-pro-top-menu.ant-pro-header-dark {
+  background-color: #fff;
+  // 左侧logo和title样式
+  .ant-pro-top-nav-header-main-left {
+    h1 {
+      color: #2a3b89;
+      font-size: 24px;
+    }
+  }
+  // 中间菜单样式
+  .ant-pro-top-nav-header-menu {
+    .ant-menu-dark .ant-menu-item > span > a {
+      color: #000;
+    }
+
+    // 划入后效果
+    .ant-menu-dark.ant-menu-horizontal > .ant-menu-item:hover {
+      background-color: #fff;
+      > span > a {
+        color: #008ff8;
+      }
+    }
+
+    // 选中后效果
+    .ant-menu.ant-menu-dark .ant-menu-item-selected {
+      background-color: #fff;
+      > span {
+        color: #008ff8;
+      }
+      // 横向滚动条颜色
+      .ant-menu-item::after {
+        border-bottom: 2px solid #3d8df5 !important;
+      }
+    }
+
+    // 触发效果
+    .ant-menu-item:active,
+    .ant-menu-submenu-title:active {
+      background-color: #fff;
+    }
+  }
+  // 右侧用户信息样式
+  .ant-pro-right-content {
+  }
+}

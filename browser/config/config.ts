@@ -19,16 +19,16 @@ export default defineConfig({
   theme: {
     // 用来配置全局的antd样式
     // 'root-entry-name': 'variable', // 全局样式的入口文件
-    'primary-color': '#67b1fa', // 全局主色
-    'link-color': '#67b1fa', // 链接色
+    'primary-color': '#008ff8', // 全局主色
+    'link-color': '#008ff8', // 链接色
     'success-color': '#60ad82', // 成功色
     'warning-color': '#f1c40f', // 警告色
     'error-color': '#e66d73', // 错误色
     'primary-1': '#eaedff', // 背景色
     'primary-2': '#e4e8fe', // 背景色
-    'primary-5': '#67b1fa',
-    'primary-color-active': '#67b1fa', // 点击色
-    'primary-color-hover': '#67b1fa', // 划入色
+    'primary-5': '#008ff8',
+    'primary-color-active': '#008ff8', // 点击色
+    'primary-color-hover': '#008ff8', // 划入色
     '@font-size': '14px', // 主字号
   },
   esbuild: {},

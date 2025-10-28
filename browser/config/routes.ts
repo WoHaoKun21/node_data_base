@@ -5,7 +5,24 @@ const routes: Route[] = [
   {
     name: 'API Hub',
     path: '/hub',
-    component: './APIHub',
+    routes: [
+      {
+        path: '/hub',
+        redirect: '/hub/apiHub',
+      },
+      {
+        name: '我的服务',
+        path: '/hub/apiHub',
+        component: './Hub/APIHub',
+        hideInMenu: true,
+      },
+      {
+        name: '我的应用',
+        path: '/hub/apiInfo',
+        component: './Hub/APiInfo',
+        hideInMenu: true,
+      },
+    ],
   },
   {
     name: '工作台',

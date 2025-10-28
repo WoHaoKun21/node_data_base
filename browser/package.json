@@ -34,6 +34,7 @@
     "echarts-gl": "^2.0.9",
     "lunar-calendar": "^0.1.4",
     "react": "18.x",
+    "react-copy-to-clipboard": "^5.1.0",
     "react-dnd": "^16.0.1",
     "react-dnd-html5-backend": "^16.0.1",
     "react-dom": "18.x",

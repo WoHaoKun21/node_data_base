@@ -9,6 +9,7 @@ import {
 } from '@ant-design/icons';
 import classNames from 'classnames';
 import styles from './index.less';
+import { history } from 'umi';
 
 const APIHub = () => {
   const [state, setState] = useState<{
@@ -147,7 +148,7 @@ const APIHub = () => {
           <Spin spinning={loading}>
             <div className={styles.box}>
               {new Array(18).fill(1).map((item, index) => (
-                <div className={styles.item} key={index}>
+                <div className={styles.item} key={index + 1}>
                   <div className={styles.itemData}>
                     <img src="/download.png" alt="" />
                     <div className={styles.info}>
@@ -168,7 +169,11 @@ const APIHub = () => {
                       <AppstoreOutlined style={{ marginRight: 5 }} />
                       云计算
                     </span>
-                    <span>
+                    <span
+                      onClick={() =>
+                        history.push(`/hub/apiInfo?id=${index + 1}`)
+                      }
+                    >
                       <PaperClipOutlined style={{ marginRight: 5 }} />
                       详情
                     </span>
